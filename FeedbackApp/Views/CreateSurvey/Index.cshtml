@@ -1,0 +1,60 @@
+﻿@model FeedbackApp.Models.ViewModels.CreateSurveyViewModel
+@{
+    ViewData["Title"] = "Create Survey";
+}
+<div class="row">
+    <div class="col">
+
+
+        <h3>Add questions to your survey</h3>
+        <h4>@Model.Survey.Title</h4>
+        <p>@Model.Survey.Description</p>
+        @if (Model.QuestionToEdit != null)
+        {
+             int i = Model.QuestionToEdit ?? default(int);
+        <form asp-action="AddOrEditQuestion" asp-route-id="@Model.Survey.Id" asp-route-questionId="@i" method="post">
+            <div class="form-group">
+                @Html.TextArea("question", Model.Survey.Questions[i].Text, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-light">Edit the question</button>
+            </div>
+        </form>
+}
+else
+{
+    <form asp-action="AddOrEditQuestion" asp-route-id="@Model.Survey.Id" method="post">
+        <div class="form-group">
+            @Html.TextArea("question", "", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-light">Add a question</button>
+        </div>
+    </form>
+}
+
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Survey.Questions.Count(); i++)
+            {
+
+                <tr>
+                    <td>@Model.Survey.Questions[i].Text</td>
+                    <td><a asp-action="Index" asp-route-id="@Model.Survey.Id" asp-route-questionId="@i">Edit</a></td>
+                </tr>
+
+        }
+            </tbody>
+        </table>
+    </div>
+</div>
+
