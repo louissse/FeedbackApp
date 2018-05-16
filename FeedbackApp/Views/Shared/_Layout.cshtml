@@ -20,11 +20,22 @@
 <body>
     @Html.Partial("_Menu")
     <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - FeedbackApp</p>
-        </footer>
+        <div class="row row flex-xl-nowrap">
+            <main class="col-12 py-4">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p>&copy; 2018 - FeedbackApp</p>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            @await Html.PartialAsync("_SelectLanguagePartial")
+                        </div>
+                    </div>
+                </footer>
+            </main>
+        </div>
     </div>
 
     <environment include="Development">

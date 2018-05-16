@@ -7,7 +7,7 @@ namespace FeedbackApp.Models
 {
     public class Question
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
         public String Text { get; set; }
         public Answers[] PossibleAnswers { get; set; }
         public Answers Answer { get; set; }

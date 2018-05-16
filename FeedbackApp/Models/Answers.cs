@@ -7,9 +7,10 @@ namespace FeedbackApp.Models
 {
     public enum Answers
     {
-        Neutral = 0,
+        NoAnswer = 0,
         BigUnsatisfied,
         SmallUnsatisfied,
+        Neutral,
         SmallSatisfied,
         BigSatisfied
     }

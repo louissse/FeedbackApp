@@ -34,6 +34,7 @@ namespace FeedbackApp.Services
             questionModel.Text = question;
 
             var survey = _surveyStore.FirstOrDefault(s => s.Id == id);
+            //questionModel.Id = survey.Questions.Count();
             survey.Questions.Add(questionModel);
 
             _surveyStore = new ConcurrentBag<Survey>(_surveyStore.Where(s => s.Id != id))

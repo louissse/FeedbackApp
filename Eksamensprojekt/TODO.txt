@@ -1,0 +1,4 @@
+Localization (Med skift af sprog) (Er implementeret)
+ViewComponent (List med surveys)
+Validation in models
+UnitTests

@@ -1,10 +1,10 @@
 ﻿ @model FeedbackApp.Models.Survey
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = Localizer["PageTitle"];
 }
 <div class="row">
     <div class="col">
-        <h2>Surveys</h2>
+        <h2>@Localizer["Header"]</h2>
         <h4>To add a new survey give it a title and description.</h4>
         <form method="post" asp-action="CreateSurvey">
             <div class="form-group">

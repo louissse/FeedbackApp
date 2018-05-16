@@ -14,10 +14,10 @@ namespace FeedbackApp.Controllers
             //Testing a question and answer
             var question1 = new Question();
             question1.Text = "Hvor glad er du for katte?";
-            question1.Id = 1;
+            //question1.Id = 1;
             var question2 = new Question();
             question2.Text = "Hvor godt kan du lide mad?";
-            question2.Id = 2;
+            //question2.Id = 2;
 
             var questionnaireModel = new Survey();
             questionnaireModel.Questions.Add(question1);
