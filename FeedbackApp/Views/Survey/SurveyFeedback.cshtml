@@ -1,0 +1,12 @@
+﻿@model List<FeedbackApp.Models.Feedback>
+@{
+    ViewData["Title"] = "SurveyFeedback";
+}
+
+<h2>SurveyFeedback</h2>
+
+@foreach (var feedback in Model)
+{
+    <p>@feedback.Text</p>
+}
+

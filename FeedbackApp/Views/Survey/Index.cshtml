@@ -1,0 +1,8 @@
+﻿@model FeedbackApp.Models.ViewModels.SurveyViewModel
+@{
+    ViewData["Title"] = "Survey";
+}
+
+
+
+@await Component.InvokeAsync("Survey", Model.SurveyId)

@@ -4,29 +4,33 @@
     <div class="col">
         <form asp-action="Index">
             @for (var i = 0; i < Model.Questions.Count(); i++)
-            {
-                <div class="form-group">
-                    <p>@Model.Questions[i].Text</p>
-                    <input asp-for="@Model.Questions[i].Text" type="hidden" />
-                    <input asp-for="@Model.Questions[i].Id" type="hidden" />
+    {
+        <div class="form-group">
+            <p>@Model.Questions[i].Text</p>
+            <input asp-for="@Model.Questions[i].Text" type="hidden" />
 
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        @for (var j = 0; j < Model.Questions[i].PossibleAnswers.Count(); j++)
-                        {
-                            var klasse = "btn btn-secondary";
-                            @if (Model.Questions[i].Answer == Model.Questions[i].PossibleAnswers[j])
-                            {
-                                klasse = "btn btn-secondary active";
-                            }
-                            <label class="@klasse">
-                                @(j + 1)
-                                <input class="form-check-input" autocomplete="off" asp-for="@Model.Questions[i].Answer" type="radio" value="@Model.Questions[i].PossibleAnswers[j]" />
-                            </label>
-                        }
-                    </div>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                @for (var j = 0; j < Model.Questions[i].PossibleAnswers.Count(); j++)
+        {
+            var klasse = "btn btn-secondary";
+            @if (Model.Questions[i].Answer == Model.Questions[i].PossibleAnswers[j])
+    {
+        klasse = "btn btn-secondary active";
+    }
+            <label class="@klasse">
+                @(j + 1)
+                <input class="form-check-input" autocomplete="off" asp-for="@Model.Questions[i].Answer" type="radio" value="@Model.Questions[i].PossibleAnswers[j]" />
+            </label>
+}
+            </div>
 
-                </div>
-            }
+        </div>
+}
+            <input asp-for="Title" type="hidden" />
+            <input asp-for="Description" type="hidden" />
+            <input asp-for="Id" type="hidden" />
+
+
             <div class="form-group">
                 <input type="submit" value="Send Answers" class="btn btn-default" />
             </div>

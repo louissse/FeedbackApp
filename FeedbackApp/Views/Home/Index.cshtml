@@ -1,4 +1,4 @@
-﻿ @model FeedbackApp.Models.Survey
+﻿@model FeedbackApp.Models.Survey
 @{
     ViewData["Title"] = Localizer["PageTitle"];
 }
@@ -21,3 +21,6 @@
         </form>
     </div>
 </div>
+
+@await Component.InvokeAsync("SurveyTable")
+

@@ -49,8 +49,10 @@ namespace FeedbackApp.UnitTests
             feedbackList.Add(feedback2);
 
             var realFeedback = feedbackService.GetFeedback(feedbackList, answeredQuestions);
-            Assert.True(realFeedback.Result[0] == feedbackList[0]);
+            Assert.True(realFeedback.Result[0] == feedbackList[0] && realFeedback.Result.Count == 1);
         }
+
+
 
         [Fact]
         public void GetFeedbackTest_TwoPriority1_True()
@@ -152,6 +154,153 @@ namespace FeedbackApp.UnitTests
 
             var realFeedback = feedbackService.GetFeedback(feedbackList, answeredQuestions);
             Assert.True(realFeedback.Result[0] == feedbackList[1]);
+        }
+
+
+        [Theory]
+        [MemberData(nameof(GetData))]
+        public async void GetFeedBackTest(List<Feedback> feedbackList, List<Question> answeredQuestions, List<Feedback> expectedFeedback)
+        {
+            var feedbackService = new FeedbackService();
+            var realFeedback = new List<Feedback>(await feedbackService.GetFeedback(feedbackList, answeredQuestions));
+            Assert.True(realFeedback.Count == expectedFeedback.Count);
+            foreach (var ef in expectedFeedback)
+            {
+                var feedBackObject = realFeedback.Find(rf => rf.Text == ef.Text);
+                Assert.True(feedBackObject != null);
+            }
+        }
+
+        public static IEnumerable<object[]> GetData()
+        {
+            var allData = new List<object[]>
+            {
+                //Test if we get priority 1
+                new object[]
+                {
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 2", Priority = 2, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 0", Priority = 0, Conditions = new List<Question>() }
+                    },
+
+                    new List<Question>()
+                    {
+                        new Question(){Text = "Question1", Answer = Answers.BigSatisfied}
+                    },
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                    },
+                },
+                //Test if we get priority 2
+                new object[]
+                {
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 2", Priority = 2, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 0", Priority = 0, Conditions = new List<Question>() }
+                    },
+
+                    new List<Question>()
+                    {
+                        new Question(){Text = "Question1", Answer = Answers.BigUnsatisfied},
+                        new Question(){Text = "Question2", Answer = Answers.BigSatisfied},
+
+                    },
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 2", Priority = 2, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+                    }
+                },
+                //Test if we get priority 0
+                new object[]
+                {
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 2", Priority = 2, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 0", Priority = 0, Conditions = new List<Question>() }
+                    },
+
+                    new List<Question>()
+                    {
+                        new Question(){Text = "Question1", Answer = Answers.BigUnsatisfied},
+                        new Question(){Text = "Question2", Answer = Answers.BigUnsatisfied},
+
+                    },
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 0", Priority = 0, Conditions = new List<Question>() }
+                    }
+                },
+                //Test the case where priority 0 is not set but no conditions are met
+                new object[]
+                {
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 2", Priority = 2, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+                    },
+
+                    new List<Question>()
+                    {
+                        new Question(){Text = "Question1", Answer = Answers.BigUnsatisfied},
+                        new Question(){Text = "Question2", Answer = Answers.BigUnsatisfied},
+
+                    },
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "", Priority = 0, Conditions = new List<Question>()}
+                    }
+                },
+                //Test where two priority 1 and both are met
+                 new object[]
+                {
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 1 also", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+                    },
+
+                    new List<Question>()
+                    {
+                        new Question(){Text = "Question1", Answer = Answers.BigSatisfied},
+                        new Question(){Text = "Question2", Answer = Answers.BigSatisfied},
+
+                    },
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 1 also", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+
+                    }
+                },
+                //Test where two priority 1 and only one met
+                 new object[]
+                {
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question1", Answer = Answers.BigSatisfied } } },
+                        new Feedback{ Text = "Priority 1 also", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+                    },
+
+                    new List<Question>()
+                    {
+                        new Question(){Text = "Question1", Answer = Answers.BigUnsatisfied},
+                        new Question(){Text = "Question2", Answer = Answers.BigSatisfied},
+
+                    },
+                    new List<Feedback>()
+                    {
+                        new Feedback{ Text = "Priority 1 also", Priority = 1, Conditions = new List<Question>(){ new Question {Text = "Question2", Answer = Answers.BigSatisfied } } },
+
+                    }
+                },
+            };
+            return allData;
         }
     }
 }

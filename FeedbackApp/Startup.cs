@@ -19,6 +19,7 @@ namespace FeedbackApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ISurveyService, SurveyService>();
+            services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
             services.AddSession();
             services.AddMvc()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FeedbackApp.Services
 {
-    public class FeedbackService
+    public class FeedbackService : IFeedbackService
     {
         public Task<List<Feedback>> GetFeedback(List<Feedback> possibleFeedback, List<Question> answeredQuestions)
         {
@@ -34,14 +34,21 @@ namespace FeedbackApp.Services
                     }
                 }
 
-                i++;
-                if (i > possibleFeedback.Count() + 1)
+                
+                if (i == 999)
                 {
-                    feedback.AddRange(possibleFeedback.Where(f => f.Priority == 0));
+                    feedback.Add(possibleFeedback.Find(f => f.Priority == 0)?? new Feedback{Text = "", Priority = 0, Conditions = new List<Question>()} );
+                    break;
                 }
-
-            } while (feedback.Count() == 0 && i < possibleFeedback.Count() + 1);
+                i++;
+            } while (feedback.Count() == 0);
             return Task.FromResult(feedback);
+        }
+
+        public Task<List<Question>> FindValidConditions(List<Question> conditions)
+        {
+            var validConditions = new List<Question>(conditions.Where(f => f.Answer != Answers.NoAnswer));                
+            return Task.FromResult(validConditions);
         }
     }
 }

@@ -23,6 +23,11 @@ namespace FeedbackApp.Services
             return Task.FromResult(true);
         }
 
+        public async Task<List<Survey>> GetAll()
+        {
+            return new List<Survey>(_surveyStore);
+        }
+
         public Task<Survey> Get(Guid id)
         {
             return Task.FromResult(_surveyStore.FirstOrDefault(x => x.Id == id));
@@ -59,5 +64,42 @@ namespace FeedbackApp.Services
             return survey;
         }
 
+        public async Task<Survey> AddFeedback(Guid id, string feedback, List<Question> conditions, int priority)
+        {
+            var feedbackModel = new Feedback();
+            feedbackModel.Text = feedback;
+            feedbackModel.Priority = priority;
+            feedbackModel.Conditions = conditions;
+
+            var survey = _surveyStore.FirstOrDefault(s => s.Id == id);
+            survey.Feedback.Add(feedbackModel);
+            survey.Feedback = new List<Feedback>(survey.Feedback.OrderBy(f => f.Priority));
+            _surveyStore = new ConcurrentBag<Survey>(_surveyStore.Where(s => s.Id != id))
+                {
+                    survey
+                };
+
+            return survey;
+
+        }
+
+        public async Task<Survey> EditFeedback(Guid id, string feedback, List<Question> conditions, int priority, int feedbackId)
+        {
+            var feedbackModel = new Feedback();
+            feedbackModel.Text = feedback;
+            feedbackModel.Priority = priority;
+            feedbackModel.Conditions = conditions;
+
+            var survey = _surveyStore.FirstOrDefault(s => s.Id == id);
+            survey.Feedback[feedbackId] = feedbackModel;
+
+            survey.Feedback = new List<Feedback>(survey.Feedback.OrderBy(f => f.Priority));
+            _surveyStore = new ConcurrentBag<Survey>(_surveyStore.Where(s => s.Id != id))
+                {
+                    survey
+                };
+
+            return survey;
+        }
     }
 }

@@ -8,19 +8,22 @@ using System.Threading.Tasks;
 
 namespace FeedbackApp.Components
 {
-    [ViewComponent(Name = "Survey")]
-    public class SurveyViewComponent : ViewComponent
+    [ViewComponent(Name = "SurveyTable")]
+
+    public class SurveyTableViewComponent : ViewComponent
     {
         readonly ISurveyService _surveyService;
 
-        public SurveyViewComponent(ISurveyService surveyService)
+        public SurveyTableViewComponent(ISurveyService surveyService)
         {
             _surveyService = surveyService;
         }
-        public async Task<IViewComponentResult> InvokeAsync(Guid id)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var survey = await _surveyService.Get(id);
-            return View(survey);
+  
+            var listOfSurveys = new List<Survey>(await _surveyService.GetAll());
+
+            return View(listOfSurveys);
         }
     }
 }
