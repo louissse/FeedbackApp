@@ -9,6 +9,7 @@ namespace FeedbackApp.Models.ViewModels
     {
         public Guid SurveyId { get; set; }
         public List<Question> Questions { get; set; }
+        public string ErrorMessage { get; set; }
 
         public SurveyViewModel()
         {

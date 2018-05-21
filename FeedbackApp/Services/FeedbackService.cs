@@ -18,14 +18,14 @@ namespace FeedbackApp.Services
 
                 foreach (var feedbackItem in priorityFeedback)
                 {
-                    var conditionsIsMet = true;
+                    var conditionsIsMet = false;
                     foreach (var condition in feedbackItem.Conditions)
                     {
 
                         var question = answeredQuestions.FirstOrDefault(q => q.Text == condition.Text);
-                        if (question.Answer != condition.Answer)
+                        if (question.Answer == condition.Answer)
                         {
-                            conditionsIsMet = false;
+                            conditionsIsMet = true;
                         }
                     }
                     if (conditionsIsMet)

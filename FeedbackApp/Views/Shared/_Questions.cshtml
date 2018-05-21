@@ -1,0 +1,25 @@
+﻿@model List<FeedbackApp.Models.Question>
+
+@for (var i = 0; i < Model.Count(); i++)
+{
+    <div class="form-group">
+        <p>@Model[i].Text</p>
+        <input asp-for="@Model[i].Text" type="hidden" />
+
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            @for (var j = 0; j < Model[i].PossibleAnswers.Count(); j++)
+            {
+                var klasse = "btn btn-secondary";
+                @if (Model[i].Answer == Model[i].PossibleAnswers[j])
+                {
+                    klasse = "btn btn-secondary active";
+                }
+                <label class="@klasse">
+                    @(j + 1)
+                    <input class="form-check-input" autocomplete="off" asp-for="@Model[i].Answer" type="radio" value="@Model[i].PossibleAnswers[j]" />
+                </label>
+            }
+        </div>
+
+    </div>
+}

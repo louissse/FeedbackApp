@@ -14,6 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Models\ViewModels\HomeViewModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HomeViewModel.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Views\Home.Index.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -22,6 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Models\ViewModels\HomeViewModel.da.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Models\ViewModels\HomeViewModel.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HomeViewModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Views\Home.Index.da.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>

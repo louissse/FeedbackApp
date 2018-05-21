@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FeedbackApp.Resources.Views {
+namespace FeedbackApp.Resources.Models.ViewModels {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace FeedbackApp.Resources.Views {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Home_Index {
+    internal class HomeViewModel {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Home_Index() {
+        internal HomeViewModel() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace FeedbackApp.Resources.Views {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FeedbackApp.Resources.Views.Home.Index", typeof(Home_Index).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FeedbackApp.Resources.Models.ViewModels.HomeViewModel", typeof(HomeViewModel).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,38 @@ namespace FeedbackApp.Resources.Views {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new survey.
+        ///   Looks up a localized string similar to Description.
         /// </summary>
-        internal static string CreateNewSurveyButton {
+        internal static string SurveyDescription {
             get {
-                return ResourceManager.GetString("CreateNewSurveyButton", resourceCulture);
+                return ResourceManager.GetString("SurveyDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To add a new survey give it a title and description.
+        ///   Looks up a localized string similar to You have to give your survey a description.
         /// </summary>
-        internal static string Description {
+        internal static string SurveyDescriptionErrorMessage {
             get {
-                return ResourceManager.GetString("Description", resourceCulture);
+                return ResourceManager.GetString("SurveyDescriptionErrorMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surveys.
+        ///   Looks up a localized string similar to Title.
         /// </summary>
-        internal static string Header {
+        internal static string SurveyTitle {
             get {
-                return ResourceManager.GetString("Header", resourceCulture);
+                return ResourceManager.GetString("SurveyTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Home.
+        ///   Looks up a localized string similar to You have to give your survey a title.
         /// </summary>
-        internal static string PageTitle {
+        internal static string SurveyTitleErrorMessage {
             get {
-                return ResourceManager.GetString("PageTitle", resourceCulture);
+                return ResourceManager.GetString("SurveyTitleErrorMessage", resourceCulture);
             }
         }
     }
