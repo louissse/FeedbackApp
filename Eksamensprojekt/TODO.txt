@@ -1,4 +1,5 @@
 Localization (Med skift af sprog) (Er implementeret)
-ViewComponent (List med surveys)
-Validation in models
-UnitTests
+ViewComponent (List med surveys) (Er implementeret)
+Validation in models (Er implementeret)
+UnitTests (Er implementeret)
+Logging (Er implementeret) Er gjort klar
