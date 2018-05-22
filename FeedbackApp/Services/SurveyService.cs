@@ -64,6 +64,20 @@ namespace FeedbackApp.Services
             return survey;
         }
 
+        public async Task<Survey> DeleteQuestion(Guid id, int questionId)
+        {
+
+            var survey = _surveyStore.FirstOrDefault(s => s.Id == id);
+            survey.Questions.RemoveAt(questionId);
+
+            _surveyStore = new ConcurrentBag<Survey>(_surveyStore.Where(s => s.Id != id))
+                {
+                    survey
+                };
+
+            return survey;
+        }
+
         public async Task<Survey> AddFeedback(Guid id, string feedback, List<Question> conditions, int priority)
         {
             var feedbackModel = new Feedback();
@@ -94,6 +108,20 @@ namespace FeedbackApp.Services
             survey.Feedback[feedbackId] = feedbackModel;
 
             survey.Feedback = new List<Feedback>(survey.Feedback.OrderBy(f => f.Priority));
+            _surveyStore = new ConcurrentBag<Survey>(_surveyStore.Where(s => s.Id != id))
+                {
+                    survey
+                };
+
+            return survey;
+        }
+
+        public async Task<Survey> DeleteFeedback(Guid id, int feedbackId)
+        {
+
+            var survey = _surveyStore.FirstOrDefault(s => s.Id == id);
+            survey.Feedback.RemoveAt(feedbackId);
+
             _surveyStore = new ConcurrentBag<Survey>(_surveyStore.Where(s => s.Id != id))
                 {
                     survey

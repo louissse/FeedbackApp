@@ -28,7 +28,7 @@ namespace FeedbackApp.Services
                             conditionsIsMet = false;
                         }
                     }
-                    if (conditionsIsMet)
+                    if (conditionsIsMet && feedbackItem.Conditions.Count() != 0)
                     {
                         feedback.Add(feedbackItem);
                     }

@@ -3,6 +3,19 @@
     ViewData["Title"] = "Survey";
 }
 
+<form asp-action="Index">
 
+    <div class="row">
+        <div class="col form-group">
+            @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = "Questions"; }
+            @Html.Partial("_Questions", Model.Questions)
+            @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = ""; }
+            <span class="text-danger">@Model.ErrorMessage</span>
 
-@await Component.InvokeAsync("Survey", Model.SurveyId)
+        </div>
+    </div>
+    <input asp-for="SurveyId" type="hidden"/>
+    <div class="form-group">
+        <input type="submit" value="Send Answers" class="btn btn-dark" />
+    </div>
+</form>

@@ -1,23 +1,23 @@
-﻿@model FeedbackApp.Models.Survey
+﻿@model FeedbackApp.Models.ViewModels.HomeViewModel
 @{
     ViewData["Title"] = Localizer["PageTitle"];
 }
 <div class="row">
     <div class="col">
         <h2>@Localizer["Header"]</h2>
-        <h4>To add a new survey give it a title and description.</h4>
-        <form method="post" asp-action="CreateSurvey">
+        <h4>@Localizer["Description"]</h4>
+        <form method="post" asp-action="AddANewSurvey">
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="SurveyTitle" class="control-label"></label>
+                <input asp-for="SurveyTitle" class="form-control" />
+                <span asp-validation-for="SurveyTitle" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="SurveyDescription" class="control-label"></label>
+                <textarea asp-for="SurveyDescription" class="form-control"></textarea>
+                <span asp-validation-for="SurveyDescription" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-dark">Create a new survey</button>
+            <button type="submit" class="btn btn-dark">@Localizer["CreateNewSurveyButton"]</button>
         </form>
     </div>
 </div>

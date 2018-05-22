@@ -6,42 +6,35 @@
 <div class="row">
     <div class="col">
         <h3>Add feedback to your survey</h3>
-        
+        <p>
+            On this page you can add specialised feedback to your survey. You write the feedback in the text field, 
+            choose some or one condition from the questions list and add a priority. If conditions from several feedbacks are met, 
+            the feedback with the highest priority will be shown (1 before 2). If feedback has the same priority both will be shown, 
+            if all conditions are met. Always add a feedback with priority 0. This will be shown, in case no conditions are met. 
+            You can edit and delete feedback from the table below. 
+        </p>
         @{ var buttonText = (Model.FeedbackToEdit != null) ? "Save feedback" : "Add feedback"; }
 
-        <form asp-action="AddOrEditFeedback" asp-route-id="@Model.Survey.Id" asp-route-feedbackId="@Model.FeedbackToEdit" method="post">
+        <form asp-action="AddOrEditFeedback" asp-route-id="@Model.SurveyId" asp-route-feedbackId="@Model.FeedbackToEdit" method="post">
             <div class="form-group">
                 <textarea asp-for="FeedbackText" class="form-control"></textarea>
                 <span asp-validation-for="FeedbackText" class="text-danger"></span>
             </div>
-            @for (var i = 0; i < Model.Conditions.Count(); i++)
-            {
-                <div class="form-group">
-                    <p>@Model.Conditions[i].Text</p>
-                    <input asp-for="@Model.Conditions[i].Text" type="hidden" />
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        @for (var j = 0; j < Model.Conditions[i].PossibleAnswers.Count(); j++)
-                        {
-                            var klasse = "btn btn-secondary";
-                            @if (Model.Conditions[i].Answer == Model.Conditions[i].PossibleAnswers[j])
-                            {
-                                klasse = "btn btn-secondary active";
-                            }
-                            <label class="@klasse">
-                                @(j + 1)
-                                <input class="form-check-input" autocomplete="off" asp-for="@Model.Conditions[i].Answer" type="radio" value="@Model.Conditions[i].PossibleAnswers[j]" />
-                            </label>
-                        }
-                    </div>
+            @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = "Conditions"; }
+            @Html.Partial("_Questions", Model.Conditions)
+            @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = ""; }
 
-                </div>
-            }
+            @*@await Component.InvokeAsync("Survey", Model.SurveyId)*@
             <div class="form-group">
                 <input asp-for="ChosenPriority" />
                 <span asp-validation-for="ChosenPriority" class="text-danger"></span>
             </div>
+            <input asp-for="SurveyId" type="hidden" />
+            <input asp-for="SurveyTitle" type="hidden" />
+            <input asp-for="SurveyDescription" type="hidden" />
+            <input asp-for="FeedbackToEdit" type="hidden" />
             <div class="form-group">
-                <button type="submit" class="btn btn-light">@buttonText</button>
+                <button type="submit" class="btn btn-outline-dark">@buttonText</button>
             </div>
         </form>
     </div>
@@ -51,8 +44,8 @@
 
 <div class="row pt-4">
     <div class="col">
-        <h4>@Model.Survey.Title</h4>
-        <p>@Model.Survey.Description</p>
+        <h4>@Model.SurveyTitle</h4>
+        <p>@Model.SurveyDescription</p>
         <table class="table">
             <thead>
                 <tr>
@@ -60,26 +53,29 @@
                     <th>Priority</th>
                     <th>Conditions</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                @for (var i = 0; i < Model.Survey.Feedback.Count(); i++)
+                @for (var i = 0; i < Model.SurveyFeedback.Count(); i++)
                 {
 
                     <tr>
-                        <td>@Model.Survey.Feedback[i].Text</td>
-                        <td>@Model.Survey.Feedback[i].Priority</td>
+                        <td>@Model.SurveyFeedback[i].Text</td>
+                        <td>@Model.SurveyFeedback[i].Priority</td>
                         <td>
-                            @foreach (var condition in Model.Survey.Feedback[i].Conditions)
+                            @foreach (var condition in Model.SurveyFeedback[i].Conditions)
                             {
                                 <div>Q: @condition.Text A: @condition.Answer </div>
                             }
                         </td>
-                        <td><a asp-action="Feedback" asp-route-id="@Model.Survey.Id" asp-route-feedbackId="@i">Edit</a></td>
+                        <td><a asp-action="Feedback" asp-route-id="@Model.SurveyId" asp-route-feedbackId="@i">Edit</a></td>
+                        <td><a asp-action="DeleteFeedback" asp-route-id="@Model.SurveyId" asp-route-feedbackId="@i">Delete</a></td>
+
                     </tr>
                 }
             </tbody>
         </table>
-        <a asp-controller="Home" asp-action="Index">Finish and go to frontpage</a>
+        <a class="btn btn-dark" asp-controller="Home" asp-action="Index">Finish and go to frontpage</a>
     </div>
 </div>

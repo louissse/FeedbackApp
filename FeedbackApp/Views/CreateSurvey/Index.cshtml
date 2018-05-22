@@ -4,56 +4,51 @@
 }
 <div class="row">
     <div class="col">
-
-
         <h3>Add questions to your survey</h3>
-
-        @{ var buttonText = "Add question";
-            var questionText = "";
-            int? questionId = null;}
-        @if (Model.QuestionToEdit != null)
-    {
-        int i = Model.QuestionToEdit ?? default(int);
-        questionText = Model.Survey.Questions[i].Text;
-        buttonText = "Edit question";
-        questionId = i;
-    }
-        <form asp-action="AddOrEditQuestion" asp-route-id="@Model.Survey.Id" asp-route-questionId="@questionId" method="post">
+        <p>
+            Add questions by writing a text in the text field and pressing "Add question".
+            You will be able to see your questions in the tabele below. You can edit and delete questions from the table.
+            When you are done use the "Save Questions and add feedback" button. You will no longer be able to edit or delete questions
+            once you hit this button.
+        </p>
+        @{ var buttonText = Model.QuestionToEdit == null ? "Add question" : "Save question"; }
+        <form asp-action="AddOrEditQuestion" asp-route-id="@Model.SurveyId" asp-route-questionId="@Model.QuestionToEdit" method="post">
             <div class="form-group">
-                @Html.TextArea("question", questionText, new { @class = "form-control" })
+                <textarea asp-for="QuestionText" class="form-control"></textarea>
+                <span asp-validation-for="QuestionText" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <button type="submit" class="btn btn-light">@buttonText</button>
+                <button type="submit" class="btn btn-outline-dark">@buttonText</button>
             </div>
         </form>
     </div>
 </div>
 <hr />
-        <div class="row pt-4">
-            <div class="col">
-                <h4>@Model.Survey.Title</h4>
-                <p>@Model.Survey.Description</p>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Question</th>
-                            <th>Edit</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (var i = 0; i < Model.Survey.Questions.Count(); i++)
-                    {
+<div class="row pt-4">
+    <div class="col">
+        <h4>@Model.SurveyTitle</h4>
+        <p>@Model.SurveyDescription</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.SurveyQuestions.Count(); i++)
+                {
+                <tr>
+                    <td>@Model.SurveyQuestions[i].Text</td>
+                    <td><a asp-action="Index" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Edit</a></td>
+                    <td><a asp-action="DeleteQuestion" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Delete</a></td>
 
-                        <tr>
-                            <td>@Model.Survey.Questions[i].Text</td>
-                            <td><a asp-action="Index" asp-route-id="@Model.Survey.Id" asp-route-questionId="@i">Edit</a></td>
-                        </tr>
-
+                </tr>
                 }
-                    </tbody>
-                </table>
-                <a asp-action="Feedback" asp-route-id="@Model.Survey.Id">Save Questions and add feedback</a>
-            </div>
-        </div>
+            </tbody>
+        </table> 
+        <a class="btn btn-dark" asp-action="Feedback" asp-route-id="@Model.SurveyId">Save Questions and add feedback</a>
+    </div>
+</div>
 
