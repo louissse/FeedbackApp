@@ -5,7 +5,12 @@
 <div class="row">
     <div class="col">
         <h3>Add questions to your survey</h3>
-
+        <p>
+            Add questions by writing a text in the text field and pressing "Add question".
+            You will be able to see your questions in the tabele below. You can edit and delete questions from the table.
+            When you are done use the "Save Questions and add feedback" button. You will no longer be able to edit or delete questions
+            once you hit this button.
+        </p>
         @{ var buttonText = Model.QuestionToEdit == null ? "Add question" : "Save question"; }
         <form asp-action="AddOrEditQuestion" asp-route-id="@Model.SurveyId" asp-route-questionId="@Model.QuestionToEdit" method="post">
             <div class="form-group">

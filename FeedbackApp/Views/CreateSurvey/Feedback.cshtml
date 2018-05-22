@@ -6,7 +6,13 @@
 <div class="row">
     <div class="col">
         <h3>Add feedback to your survey</h3>
-
+        <p>
+            On this page you can add specialised feedback to your survey. You write the feedback in the text field, 
+            choose some or one condition from the questions list and add a priority. If conditions from several feedbacks are met, 
+            the feedback with the highest priority will be shown (1 before 2). If feedback has the same priority both will be shown, 
+            if all conditions are met. Always add a feedback with priority 0. This will be shown, in case no conditions are met. 
+            You can edit and delete feedback from the table below. 
+        </p>
         @{ var buttonText = (Model.FeedbackToEdit != null) ? "Save feedback" : "Add feedback"; }
 
         <form asp-action="AddOrEditFeedback" asp-route-id="@Model.SurveyId" asp-route-feedbackId="@Model.FeedbackToEdit" method="post">
