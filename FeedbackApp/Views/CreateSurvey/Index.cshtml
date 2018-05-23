@@ -26,8 +26,19 @@
 <hr />
 <div class="row pt-4">
     <div class="col">
-        <h4>@Model.SurveyTitle</h4>
-        <p>@Model.SurveyDescription</p>
+
+        <div class="row">
+            <div class="col-4">
+                <h4>@Model.SurveyTitle</h4>
+                <p>@Model.SurveyDescription</p>
+            </div>
+            <div class="col-4">
+                @if (Model.SurveyTitle.Trim().ToLower() == "kat")
+                {
+                    <Cat></Cat>
+                }
+            </div>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -39,15 +50,15 @@
             <tbody>
                 @for (var i = 0; i < Model.SurveyQuestions.Count(); i++)
                 {
-                <tr>
-                    <td>@Model.SurveyQuestions[i].Text</td>
-                    <td><a asp-action="Index" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Edit</a></td>
-                    <td><a asp-action="DeleteQuestion" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Delete</a></td>
+                    <tr>
+                        <td>@Model.SurveyQuestions[i].Text</td>
+                        <td><a asp-action="Index" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Edit</a></td>
+                        <td><a asp-action="DeleteQuestion" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Delete</a></td>
 
-                </tr>
+                    </tr>
                 }
             </tbody>
-        </table> 
+        </table>
         <a class="btn btn-dark" asp-action="Feedback" asp-route-id="@Model.SurveyId">Save Questions and add feedback</a>
     </div>
 </div>

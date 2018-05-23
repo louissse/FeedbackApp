@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using FeedbackApp.Repositories;
 using FeedbackApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,8 @@ namespace FeedbackApp
         {
             services.AddTransient<ISurveyService, SurveyService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+            services.AddTransient<ICatRepository, CatRepository>();
+
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
             services.AddSession();
             services.AddMvc()
