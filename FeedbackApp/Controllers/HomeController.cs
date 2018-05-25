@@ -15,10 +15,12 @@ namespace FeedbackApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        readonly ISurveyService _surveyService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ISurveyService surveyService)
         {
             _logger = logger;
+            _surveyService = surveyService;
         }
 
         public IActionResult Index()
@@ -44,6 +46,19 @@ namespace FeedbackApp.Controllers
             {
                 return View("Index", homeViewModel);
             }
+        }
+
+        public async Task<IActionResult> DeleteSurvey(Guid id)
+        {
+            await _surveyService.DeleteSurvey(id);
+            return RedirectToAction("Index");
+        }
+
+        [Route("/Error")]
+        public IActionResult Error()
+        {
+            return View();
+            // Handle error here
         }
 
         [HttpPost]

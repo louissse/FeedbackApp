@@ -10,6 +10,9 @@
                     <th>Survey</th>
                     <th>Description</th>
                     <th></th>
+                    <th></th>
+                    <th></th>
+
 
                 </tr>
             </thead>
@@ -17,11 +20,14 @@
                 @for (var i = 0; i < Model.Count(); i++)
                 {
 
-                    <tr>
-                        <td>@Model[i].Title</td>
-                        <td>@Model[i].Description</td>
-                        <td><a asp-controller="Survey" asp-action="Index" asp-route-id="@Model[i].Id">Try survey</a></td>
-                    </tr>
+                <tr>
+                    <td>@Model[i].Title</td>
+                    <td>@Model[i].Description</td>
+                    <td><a asp-controller="Survey" asp-action="Index" asp-route-id="@Model[i].Id">Try survey</a></td>
+                    <td><a asp-controller="CreateSurvey" asp-action="Index" asp-route-id="@Model[i].Id">Edit survey</a></td>
+                    <td><a asp-controller="Home" asp-action="DeleteSurvey" asp-route-id="@Model[i].Id">Delete survey</a></td>
+
+                </tr>
 
                 }
             </tbody>

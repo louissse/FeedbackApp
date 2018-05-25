@@ -20,7 +20,7 @@
                 <textarea asp-for="FeedbackText" class="form-control"></textarea>
                 <span asp-validation-for="FeedbackText" class="text-danger"></span>
             </div>
-            @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = "Conditions"; }
+            @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = "PossibleConditions"; }
             @Html.Partial("_Questions", Model.PossibleConditions)
             @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = ""; }
 

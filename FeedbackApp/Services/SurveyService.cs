@@ -37,6 +37,21 @@ namespace FeedbackApp.Services
             
         }
 
+        public async Task<bool> DeleteSurvey(Guid id)
+        {
+
+            using (var db = new FeedbackContext(_dbContextOptions))
+            {
+                var survey = await db.survey.Include(s => s.Questions).Include(s => s.Feedback)
+                        .ThenInclude(f => f.Conditions).FirstOrDefaultAsync(
+                    x => x.Id == id);
+                db.survey.Remove(survey);
+                await db.SaveChangesAsync();
+                return true;
+            }
+
+        }
+
         public async Task<List<Survey>> GetAll()
         {
             using (var db = new FeedbackContext(_dbContextOptions))
@@ -48,7 +63,6 @@ namespace FeedbackApp.Services
 
         public async Task<Survey> Get(Guid id)
         {
-
             using (var db = new FeedbackContext(_dbContextOptions))
             {
                 var survey = await db.survey.Include(s => s.Questions).FirstOrDefaultAsync(
@@ -83,13 +97,21 @@ namespace FeedbackApp.Services
 
         public async Task DeleteQuestion(Guid id, int questionId)
         {
-
-            using (var db = new FeedbackContext(_dbContextOptions))
+            try
             {
-                var question = db.question.FirstOrDefault(q => q.QuestionId == questionId);
-                db.question.Remove(question);
-                await db.SaveChangesAsync();
+                using (var db = new FeedbackContext(_dbContextOptions))
+                {
+                    var question = db.question.FirstOrDefault(q => q.QuestionId == questionId);
+                    db.question.Remove(question);
+                    await db.SaveChangesAsync();
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public async Task<Survey> AddFeedback(Guid id, string feedback, List<Condition> conditions, int priority)
@@ -111,16 +133,17 @@ namespace FeedbackApp.Services
 
         public async Task EditFeedback(Guid id, string feedbackText, List<Condition> conditions, int priority, int feedbackId)
         {
-            var feedbackModel = new Feedback();
-            feedbackModel.Text = feedbackText;
-            feedbackModel.Priority = priority;
-            feedbackModel.Conditions = conditions; 
 
             using (var db = new FeedbackContext(_dbContextOptions))
             {
                 var feedback = db.feedback.Include(f => f.Conditions).FirstOrDefault(f => f.FeedbackId == feedbackId);
                 db.feedback.Remove(feedback);
-                
+
+                var feedbackModel = new Feedback();
+                feedbackModel.Text = feedbackText;
+                feedbackModel.Priority = priority;
+                feedbackModel.Conditions = conditions;
+
                 var survey = db.survey.FirstOrDefault<Survey>(x => x.Id == id);
                 survey.Feedback.Add(feedbackModel);
                 await db.SaveChangesAsync();

@@ -10,6 +10,7 @@ namespace FeedbackApp.Services
         Task<bool> AddSurvey(Survey survey);
         Task<List<Survey>> GetAll();
         Task<Survey> Get(Guid id);
+        Task<bool> DeleteSurvey(Guid id);
         Task<Survey> AddQuestion(Guid id, string question);
         Task EditQuestion(Guid id, int questionId, string question);
         Task DeleteQuestion(Guid id, int questionId);
