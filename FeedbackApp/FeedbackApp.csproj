@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180525095927_InitialDbScema.cs" />
+    <Compile Remove="Migrations\20180525095927_InitialDbScema.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\app\" />
   </ItemGroup>
 

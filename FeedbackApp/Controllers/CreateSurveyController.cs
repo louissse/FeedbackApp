@@ -31,7 +31,7 @@ namespace FeedbackApp.Controllers
             {
                 SurveyId = survey.Id,
                 QuestionToEdit = questionId,
-                QuestionText = questionId == null ? "" : survey.Questions[questionId ?? default(int)].Text,
+                QuestionText = questionId == null ? "" : survey.Questions.FirstOrDefault(q => q.QuestionId == questionId).Text,
                 SurveyTitle = survey.Title,
                 SurveyDescription = survey.Description,
                 SurveyQuestions = survey.Questions
@@ -45,8 +45,8 @@ namespace FeedbackApp.Controllers
         {
             if (questionId != null && ModelState.IsValid)
             {
-                var survey = await _surveyService.EditQuestion(id, questionId ?? 0, createSurveyViewModel.QuestionText);
-                return RedirectToAction("Index", new { id = survey.Id });
+                await _surveyService.EditQuestion(id, questionId ?? 0, createSurveyViewModel.QuestionText);
+                return RedirectToAction("Index", new { id = id });
             }
             else if (ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace FeedbackApp.Controllers
                 //Decorate the ViewModel
                 createSurveyViewModel.SurveyId = survey.Id;
                 createSurveyViewModel.QuestionToEdit = questionId;
-                createSurveyViewModel.QuestionText = questionId == null ? "" : survey.Questions[questionId ?? default(int)].Text;
+                createSurveyViewModel.QuestionText = questionId == null ? "" : survey.Questions.FirstOrDefault(q => q.QuestionId == questionId).Text;
                 createSurveyViewModel.SurveyTitle = survey.Title;
                 createSurveyViewModel.SurveyDescription = survey.Description;
                 createSurveyViewModel.SurveyQuestions = survey.Questions;
@@ -72,8 +72,8 @@ namespace FeedbackApp.Controllers
 
         public async Task<IActionResult> DeleteQuestion(Guid id, int questionId)
         {
-            var survey = await _surveyService.DeleteQuestion(id, questionId);
-            return RedirectToAction("Index", new { id = survey.Id });
+            await _surveyService.DeleteQuestion(id, questionId);
+            return RedirectToAction("Index", new { id = id });
 
         }
 
@@ -87,17 +87,17 @@ namespace FeedbackApp.Controllers
                 FeedbackText = "",
                 SurveyTitle = survey.Title,
                 SurveyDescription = survey.Description,
-                Conditions = new List<Question>(survey.Questions) 
+                PossibleConditions = new List<Question>(survey.Questions) 
             };
 
             //When we want to edit a feedback
             if (feedbackId != null)
             {
-                int feedbackIdInt = feedbackId ?? default(int);
-                feedbackViewModel.FeedbackText = survey.Feedback[feedbackIdInt].Text;
-                feedbackViewModel.FeedbackToEdit = feedbackIdInt;
-                feedbackViewModel.ChosenPriority = survey.Feedback[feedbackIdInt].Priority;
-                feedbackViewModel.Conditions = FilterConditions(survey.Questions, survey.Feedback[feedbackIdInt].Conditions);
+                var feedback = survey.Feedback.FirstOrDefault(f => f.FeedbackId == feedbackId);
+                feedbackViewModel.FeedbackText = feedback.Text;
+                feedbackViewModel.FeedbackToEdit = feedbackId;
+                feedbackViewModel.ChosenPriority = feedback.Priority;
+                feedbackViewModel.PossibleConditions = FilterConditions(survey.Questions, feedback.Conditions);
             }
             return View(feedbackViewModel);
         }
@@ -108,15 +108,17 @@ namespace FeedbackApp.Controllers
             if (!ModelState.IsValid)
             {
                 var survey = await _surveyService.Get(id);
+                
                 //The SurveyFeedback is not bound to the model in the View as it is a complex object
                 feedbackViewModel.SurveyFeedback = survey.Feedback;
                 return View("Feedback", feedbackViewModel);
             }
 
-            var conditions = await _feedbackService.FindValidConditions(feedbackViewModel.Conditions);
+            //Get a list of Conditions from the possible (Question)conditions
+            var conditions = await _feedbackService.FindValidConditions(feedbackViewModel.PossibleConditions);
             if (feedbackId != null)
             {
-                var survey = await _surveyService.EditFeedback(id, feedbackViewModel.FeedbackText, conditions, feedbackViewModel.ChosenPriority, feedbackId ?? 0);
+                await _surveyService.EditFeedback(id, feedbackViewModel.FeedbackText, conditions, feedbackViewModel.ChosenPriority, feedbackId ?? 0);
                 return RedirectToAction("Feedback", new { id = id });
             }
             else
@@ -129,12 +131,12 @@ namespace FeedbackApp.Controllers
 
         public async Task<IActionResult> DeleteFeedback(Guid id, int feedbackId)
         {
-            var survey = await _surveyService.DeleteFeedback(id, feedbackId);
-            return RedirectToAction("Feedback", new { id = survey.Id });
+            await _surveyService.DeleteFeedback(id, feedbackId);
+            return RedirectToAction("Feedback", new { id = id });
 
         }
 
-        private List<Question> FilterConditions(List<Question> conditionList, List<Question> filterList)
+        private List<Question> FilterConditions(List<Question> conditionList, List<Condition> filterList)
         {
             var filteredConditions = new List<Question>(conditionList);
 
@@ -142,9 +144,9 @@ namespace FeedbackApp.Controllers
             {
                 foreach (var filter in filterList)
                 {
-                    if (filter.Text == conditionList[i].Text)
+                    if (filter.QuestionId == conditionList[i].QuestionId)
                     {
-                        filteredConditions[i] = filter;
+                        filteredConditions[i].Answer = filter.Answer;
                     }
                 }
             }

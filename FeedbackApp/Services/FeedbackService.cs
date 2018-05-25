@@ -22,7 +22,7 @@ namespace FeedbackApp.Services
                     foreach (var condition in feedbackItem.Conditions)
                     {
 
-                        var question = answeredQuestions.FirstOrDefault(q => q.Text == condition.Text);
+                        var question = answeredQuestions.FirstOrDefault(q => q.QuestionId == condition.QuestionId);
                         if (question.Answer != condition.Answer)
                         {
                             conditionsIsMet = false;
@@ -37,7 +37,7 @@ namespace FeedbackApp.Services
                 
                 if (i == 999)
                 {
-                    feedback.Add(possibleFeedback.Find(f => f.Priority == 0)?? new Feedback{Text = "", Priority = 0, Conditions = new List<Question>()} );
+                    feedback.Add(possibleFeedback.Find(f => f.Priority == 0)?? new Feedback{Text = "", Priority = 0, Conditions = new List<Condition>()} );
                     break;
                 }
                 i++;
@@ -45,10 +45,22 @@ namespace FeedbackApp.Services
             return Task.FromResult(feedback);
         }
 
-        public Task<List<Question>> FindValidConditions(List<Question> conditions)
+        public Task<List<Condition>> FindValidConditions(List<Question> questions)
         {
-            var validConditions = new List<Question>(conditions.Where(f => f.Answer != Answers.NoAnswer));                
-            return Task.FromResult(validConditions);
+            var validConditions = new List<Question>(questions.Where(f => f.Answer != Answers.NoAnswer));
+
+            var conditions = new List<Condition>();
+            foreach (var question in validConditions)
+            {
+                var condition = new Condition
+                {
+                    QuestionId = question.QuestionId,
+                    Answer = question.Answer
+                };
+                conditions.Add(condition);
+            }
+
+            return Task.FromResult(conditions);
         }
     }
 }

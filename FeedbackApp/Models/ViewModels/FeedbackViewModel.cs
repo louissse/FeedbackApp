@@ -19,12 +19,11 @@ namespace FeedbackApp.Models.ViewModels
         public int ChosenPriority { get; set; }
         [Required]
         public string FeedbackText { get; set; }
-        public List<Question> Conditions { get; set; } //These are conditions for the feedback to be shown
-
+        public List<Question> PossibleConditions { get; set; } 
 
         public FeedbackViewModel()
         {
-            Conditions = new List<Question>();
+            PossibleConditions = new List<Question>();
 
 
         }

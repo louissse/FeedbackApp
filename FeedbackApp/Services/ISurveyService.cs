@@ -11,11 +11,11 @@ namespace FeedbackApp.Services
         Task<List<Survey>> GetAll();
         Task<Survey> Get(Guid id);
         Task<Survey> AddQuestion(Guid id, string question);
-        Task<Survey> EditQuestion(Guid id, int questionId, string question);
-        Task<Survey> DeleteQuestion(Guid id, int questionId);
-        Task<Survey> AddFeedback(Guid id, string feedback, List<Question> conditions, int priority);
-        Task<Survey> EditFeedback(Guid id, string feedback, List<Question> conditions, int priority, int feedbackId);
-        Task<Survey> DeleteFeedback(Guid id, int feedbackId);
+        Task EditQuestion(Guid id, int questionId, string question);
+        Task DeleteQuestion(Guid id, int questionId);
+        Task<Survey> AddFeedback(Guid id, string feedback, List<Condition> conditions, int priority);
+        Task EditFeedback(Guid id, string feedback, List<Condition> conditions, int priority, int feedbackId);
+        Task DeleteFeedback(Guid id, int feedbackId);
 
     }
 }

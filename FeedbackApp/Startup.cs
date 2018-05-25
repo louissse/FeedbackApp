@@ -4,24 +4,45 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using FeedbackApp.Repositories;
+using Microsoft.EntityFrameworkCore;
 using FeedbackApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using FeedbackApp.Data;
 
 namespace FeedbackApp
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ISurveyService, SurveyService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddTransient<ICatRepository, CatRepository>();
+
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<FeedbackContext>(options => options.UseSqlServer(connectionString));
+            //services.AddEntityFrameworkSqlServer()
+            //    .AddDbContext<FeedbackContext>((serviceProvider, options) =>
+            //        options.UseSqlServer(connectionString)
+            //        .UseInternalServiceProvider(serviceProvider)
+            //    );
+
+            //var dbContextOptionsbuilder = new DbContextOptionsBuilder<FeedbackContext>().UseSqlServer(connectionString);
+            //services.AddSingleton(dbContextOptionsbuilder.Options);
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
             services.AddSession();

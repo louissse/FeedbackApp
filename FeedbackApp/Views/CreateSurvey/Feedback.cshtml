@@ -21,7 +21,7 @@
                 <span asp-validation-for="FeedbackText" class="text-danger"></span>
             </div>
             @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = "Conditions"; }
-            @Html.Partial("_Questions", Model.Conditions)
+            @Html.Partial("_Questions", Model.PossibleConditions)
             @{ Html.ViewData.TemplateInfo.HtmlFieldPrefix = ""; }
 
             @*@await Component.InvokeAsync("Survey", Model.SurveyId)*@
@@ -66,10 +66,10 @@
                         <td>
                             @foreach (var condition in Model.SurveyFeedback[i].Conditions)
                             {
-                                <div>Q: @condition.Text A: @condition.Answer </div>
+                                <div>Q: @Model.PossibleConditions.First(q => q.QuestionId == condition.QuestionId).Text A: @condition.Answer </div>
                             }
                         </td>
-                        <td><a asp-action="Feedback" asp-route-id="@Model.SurveyId" asp-route-feedbackId="@i">Edit</a></td>
+                        <td><a asp-action="Feedback" asp-route-id="@Model.SurveyId" asp-route-feedbackId="@Model.SurveyFeedback[i].FeedbackId">Edit</a></td>
                         <td><a asp-action="DeleteFeedback" asp-route-id="@Model.SurveyId" asp-route-feedbackId="@i">Delete</a></td>
 
                     </tr>

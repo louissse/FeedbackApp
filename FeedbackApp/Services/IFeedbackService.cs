@@ -6,7 +6,7 @@ namespace FeedbackApp.Services
 {
     public interface IFeedbackService
     {
-        Task<List<Question>> FindValidConditions(List<Question> conditions);
+        Task<List<Condition>> FindValidConditions(List<Question> questions);
         Task<List<Feedback>> GetFeedback(List<Feedback> possibleFeedback, List<Question> answeredQuestions);
     }
 }

@@ -52,8 +52,8 @@
                 {
                     <tr>
                         <td>@Model.SurveyQuestions[i].Text</td>
-                        <td><a asp-action="Index" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Edit</a></td>
-                        <td><a asp-action="DeleteQuestion" asp-route-id="@Model.SurveyId" asp-route-questionId="@i">Delete</a></td>
+                        <td><a asp-action="Index" asp-route-id="@Model.SurveyId" asp-route-questionId="@Model.SurveyQuestions[i].QuestionId">Edit</a></td>
+                        <td><a asp-action="DeleteQuestion" asp-route-id="@Model.SurveyId" asp-route-questionId="@Model.SurveyQuestions[i].QuestionId">Delete</a></td>
 
                     </tr>
                 }
