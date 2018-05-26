@@ -35,14 +35,14 @@ namespace FeedbackApp
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<FeedbackContext>(options => options.UseSqlServer(connectionString));
-            //services.AddEntityFrameworkSqlServer()
-            //    .AddDbContext<FeedbackContext>((serviceProvider, options) =>
-            //        options.UseSqlServer(connectionString)
-            //        .UseInternalServiceProvider(serviceProvider)
-            //    );
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<FeedbackContext>((serviceProvider, options) =>
+                    options.UseSqlServer(connectionString)
+                    .UseInternalServiceProvider(serviceProvider)
+                );
 
-            //var dbContextOptionsbuilder = new DbContextOptionsBuilder<FeedbackContext>().UseSqlServer(connectionString);
-            //services.AddSingleton(dbContextOptionsbuilder.Options);
+            var dbContextOptionsbuilder = new DbContextOptionsBuilder<FeedbackContext>().UseSqlServer(connectionString);
+            services.AddSingleton(dbContextOptionsbuilder.Options);
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
             services.AddSession();

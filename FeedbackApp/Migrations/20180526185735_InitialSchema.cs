@@ -29,7 +29,7 @@ namespace FeedbackApp.Migrations
                     FeedbackId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Priority = table.Column<int>(nullable: false),
-                    SurveyId = table.Column<Guid>(nullable: true),
+                    SurveyId = table.Column<Guid>(nullable: false),
                     Text = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -40,7 +40,7 @@ namespace FeedbackApp.Migrations
                         column: x => x.SurveyId,
                         principalTable: "survey",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,19 +50,12 @@ namespace FeedbackApp.Migrations
                     QuestionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Answer = table.Column<int>(nullable: false),
-                    FeedbackId = table.Column<int>(nullable: true),
                     SurveyId = table.Column<Guid>(nullable: true),
                     Text = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_question", x => x.QuestionId);
-                    table.ForeignKey(
-                        name: "FK_question_feedback_FeedbackId",
-                        column: x => x.FeedbackId,
-                        principalTable: "feedback",
-                        principalColumn: "FeedbackId",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_question_survey_SurveyId",
                         column: x => x.SurveyId,
@@ -71,15 +64,36 @@ namespace FeedbackApp.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "condition",
+                columns: table => new
+                {
+                    ConditionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Answer = table.Column<int>(nullable: false),
+                    FeedbackId = table.Column<int>(nullable: true),
+                    QuestionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_condition", x => x.ConditionId);
+                    table.ForeignKey(
+                        name: "FK_condition_feedback_FeedbackId",
+                        column: x => x.FeedbackId,
+                        principalTable: "feedback",
+                        principalColumn: "FeedbackId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_condition_FeedbackId",
+                table: "condition",
+                column: "FeedbackId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_feedback_SurveyId",
                 table: "feedback",
                 column: "SurveyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_question_FeedbackId",
-                table: "question",
-                column: "FeedbackId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_question_SurveyId",
@@ -89,6 +103,9 @@ namespace FeedbackApp.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "condition");
+
             migrationBuilder.DropTable(
                 name: "question");
 

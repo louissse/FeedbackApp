@@ -12,7 +12,7 @@ using System;
 namespace FeedbackApp.Migrations
 {
     [DbContext(typeof(FeedbackContext))]
-    [Migration("20180525101953_Initial-Schema")]
+    [Migration("20180526185735_InitialSchema")]
     partial class InitialSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,6 +22,24 @@ namespace FeedbackApp.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("FeedbackApp.Models.Condition", b =>
+                {
+                    b.Property<int>("ConditionId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Answer");
+
+                    b.Property<int?>("FeedbackId");
+
+                    b.Property<int>("QuestionId");
+
+                    b.HasKey("ConditionId");
+
+                    b.HasIndex("FeedbackId");
+
+                    b.ToTable("condition");
+                });
+
             modelBuilder.Entity("FeedbackApp.Models.Feedback", b =>
                 {
                     b.Property<int>("FeedbackId")
@@ -29,7 +47,7 @@ namespace FeedbackApp.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<Guid?>("SurveyId");
+                    b.Property<Guid>("SurveyId");
 
                     b.Property<string>("Text");
 
@@ -47,15 +65,11 @@ namespace FeedbackApp.Migrations
 
                     b.Property<int>("Answer");
 
-                    b.Property<int?>("FeedbackId");
-
                     b.Property<Guid?>("SurveyId");
 
                     b.Property<string>("Text");
 
                     b.HasKey("QuestionId");
-
-                    b.HasIndex("FeedbackId");
 
                     b.HasIndex("SurveyId");
 
@@ -76,19 +90,23 @@ namespace FeedbackApp.Migrations
                     b.ToTable("survey");
                 });
 
-            modelBuilder.Entity("FeedbackApp.Models.Feedback", b =>
-                {
-                    b.HasOne("FeedbackApp.Models.Survey")
-                        .WithMany("Feedback")
-                        .HasForeignKey("SurveyId");
-                });
-
-            modelBuilder.Entity("FeedbackApp.Models.Question", b =>
+            modelBuilder.Entity("FeedbackApp.Models.Condition", b =>
                 {
                     b.HasOne("FeedbackApp.Models.Feedback")
                         .WithMany("Conditions")
                         .HasForeignKey("FeedbackId");
+                });
 
+            modelBuilder.Entity("FeedbackApp.Models.Feedback", b =>
+                {
+                    b.HasOne("FeedbackApp.Models.Survey")
+                        .WithMany("Feedback")
+                        .HasForeignKey("SurveyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("FeedbackApp.Models.Question", b =>
+                {
                     b.HasOne("FeedbackApp.Models.Survey")
                         .WithMany("Questions")
                         .HasForeignKey("SurveyId");

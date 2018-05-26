@@ -30,13 +30,11 @@ namespace FeedbackApp.Migrations
 
                     b.Property<int?>("FeedbackId");
 
-                    b.Property<int?>("QuestionId");
+                    b.Property<int>("QuestionId");
 
                     b.HasKey("ConditionId");
 
                     b.HasIndex("FeedbackId");
-
-                    b.HasIndex("QuestionId");
 
                     b.ToTable("condition");
                 });
@@ -96,10 +94,6 @@ namespace FeedbackApp.Migrations
                     b.HasOne("FeedbackApp.Models.Feedback")
                         .WithMany("Conditions")
                         .HasForeignKey("FeedbackId");
-
-                    b.HasOne("FeedbackApp.Models.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("FeedbackApp.Models.Feedback", b =>
